@@ -8,6 +8,8 @@ class HomeController {
         echo $this->name;
     }
 
+
+
     public function __construct(){
         $this->printoutName();
     }
