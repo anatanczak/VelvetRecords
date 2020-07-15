@@ -1,17 +1,11 @@
 <?php
 
-class HomeController {
-
-    private $name = "HomeController";
-
-    public function printoutName() {
-        echo $this->name;
-    }
+class HomeController extends Controller {
 
 
+public function index(){
 
-    public function __construct(){
-        $this->printoutName();
-    }
+}
+
 
 }

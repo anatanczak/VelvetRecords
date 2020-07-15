@@ -1,0 +1,23 @@
+body{
+    background-color: #D2C4B5;
+}
+
+.my-personal-override-class{
+    border: 1px solid #272725;
+    border-radius: 8px;
+}
+
+.violet-color-override-class{
+    background-color: #272725;
+    border-color: #272725;
+}
+.violet-color-override-class:hover{
+    background-color: #7A776D;
+    border-color: #7A776D;
+}
+.red-text-override-class{
+    color: #B75956;
+}
+.min-height-override-class-200{
+    min-height: 220px;
+}

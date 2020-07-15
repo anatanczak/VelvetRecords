@@ -13,7 +13,6 @@ class Router {
         $url = rtrim($fromQueryString, '/');
         $url = filter_var($fromQueryString, FILTER_SANITIZE_URL);
         $url = explode('/', $url);
-        var_dump($url);
         return $url;
     }
 
@@ -31,12 +30,10 @@ class Router {
 
             if(file_exists( '../app/controllers/' . $controller .'.php')){
                 $this->currentController = $controller;
-                echo $this->currentController;
                 //unset 0 index
                 unset($url[0]);
             }
         }
-        var_dump($url);
 
         //require the controller
         require_once $this->pathToControllers . $this->currentController .'.php';
