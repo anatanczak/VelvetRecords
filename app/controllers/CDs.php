@@ -11,11 +11,21 @@ class CDs extends Controller {
     public function index() {
         $cds = $this->cdModel->getAllCDs();
         $data = [
-            'pageTitle' => 'OUR CD COLLECTION',
+            'pathToDetailedInfo' => URLROOT . 'cds/details',
+            'pageTitle' => 'Notre collection de vinyl',
             'cds' => $cds
         ];
         $this->loadView('pages/cdlist', $data);
 
+    }
+
+    public function details($id){
+        $idNumber = substr($id, 3);
+        $cd = $this->cdModel->getSingleCD($idNumber);
+        $data = [
+            'cd' => $cd
+        ];
+        $this->loadView('pages/cddetailedinfo', $data);
     }
 
 

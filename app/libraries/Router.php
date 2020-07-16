@@ -3,7 +3,7 @@
 class Router {
     protected $pathToControllers = '../app/controllers/';
     //set the default controller
-    protected $currentController = 'HomeController';
+    protected $currentController = 'cds';
     //set the default method
     protected $currentMethod = 'index';
     protected $params = [];
@@ -47,7 +47,6 @@ class Router {
 
             if(method_exists($this->currentController, $method)) {
                 $this->currentMethod = $method;
-                var_dump($this->currentMethod);
             }
             unset($url[1]);
         }

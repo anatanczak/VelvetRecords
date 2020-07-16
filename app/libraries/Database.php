@@ -41,4 +41,11 @@ class Database {
         return $preparedStatement->fetchALL(PDO::FETCH_OBJ);
     }
 
+
+    public function getSingleResultWithQuery($sql, $params){
+        $preparedStatement = $this->dbHandler->prepare($sql);
+        $preparedStatement->execute($params);
+        return $preparedStatement->fetchObject();
+    }
+
 }

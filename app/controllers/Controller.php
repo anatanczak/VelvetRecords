@@ -21,6 +21,8 @@ class Controller {
 
 
         if(file_exists('../app/views/' . $view . '.php')) {
+            //extract variables but donnot override the existing variables if
+            // one exists (skip flag)
             extract($data, EXTR_SKIP);
             require_once '../app/views/' . $view . '.php';
         } else {
