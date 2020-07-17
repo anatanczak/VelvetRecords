@@ -33,13 +33,13 @@
 
             <a class=" btn btn-info btn-block
                         violet-color-override-class mt-2 "
-                                href="<?php
-                echo
-                    $pathToDetailedInfo .'/id=' . $cd->disc_id;?>">
+                                href="<?php echo $pathToDetailedInfo .'/id='
+                                . $cd->disc_id;?>">
                     Détails</a>
         </section>
     <?php endforeach; ?>
     </div>
 
 </div>
+
 <?php require APPROOT . '/views/include/footer.php'; ?>

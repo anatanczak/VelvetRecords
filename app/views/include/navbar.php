@@ -5,7 +5,18 @@
              class="d-inline-block align-top" alt="">
         VelvetRecords
     </a>
-    <img src="<?php echo
-        URLROOT . 'images/account-icon.svg'?>" width="30" height="30"
-         class="d-inline-block align-top justify-self-end" alt="">
+    <a id="icon"
+       class="d-inline-block
+    align-top
+    justify-self-end">
+        <img src="<?php echo
+            URLROOT . 'images/account-icon.svg'?>" width="30" height="30"
+             alt="">
+    </a>
+
+    <script type="text/javascript">
+
+
+
+    </script>
 </nav>
