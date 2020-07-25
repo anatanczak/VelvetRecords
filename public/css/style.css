@@ -5,7 +5,7 @@ body{
     background-size: contain;*/
     font-family: 'Roboto', sans-serif;
 }
-.body-background-picture{
+.background-picture{
     background-image: url("../images/vinyl-background.jpg");
     background-size: 100vw;
     background-repeat: repeat;
@@ -16,20 +16,14 @@ body{
 .white-text-override-class{
     color: #FBFBFB;
 }
-.my-personal-override-class{
-
+.white-background-override-class{
+    background-color: #FBFBFB;
+}
+.lightgray-rounded-corners-override-class{
     border-radius: 8px;
     background-color: #f2f2f2;
 }
 
-/*.button-color-override-class{
-    background-color: #2E373D;
-    border-color: #2E373D;
-}
-.button-color-override-class:hover{
-    background-color: #7A776D;
-    border-color: #7A776D;
-}*/
 .red-text-override-class{
     color: #B75956;
 }
@@ -43,6 +37,33 @@ body{
 .height-max-70vh-override-class{
     max-height: 70vh;
 }
-.height-min-100vh-override-class{
-    min-height: 100vh;
+.height-min-90vh-override-class{
+    min-height: 90vh;
 }
+.red-color-with-opacity-override-class{
+    background-color:rgba(255,0,0,0.3)
+}
+
+
+/*----MODAL CSS---*/
+
+.form-elegant .font-small {
+    font-size: 0.8rem; }
+
+.form-elegant .z-depth-1a {
+    -webkit-box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25);
+    box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25); }
+
+.form-elegant .z-depth-1-half,
+.form-elegant .btn:hover {
+    -webkit-box-shadow: 0 5px 11px 0 rgba(85, 182, 255, 0.28), 0 4px 15px 0 rgba(36, 133, 255, 0.15);
+    box-shadow: 0 5px 11px 0 rgba(85, 182, 255, 0.28), 0 4px 15px 0 rgba(36, 133, 255, 0.15); }
+
+.form-elegant .modal-header {
+    border-bottom: none; }
+
+.modal-dialog .form-elegant .btn .fab {
+    color: #2196f3!important; }
+
+.form-elegant .modal-body, .form-elegant .modal-footer {
+    font-weight: 400; }

@@ -48,4 +48,9 @@ class Database {
         return $preparedStatement->fetchObject();
     }
 
+    public function insertIntoDatabase($sql, $params) {
+        $preparedStatement = $this->dbHandler->prepare($sql);
+        return $preparedStatement->execute($params);
+    }
+
 }
