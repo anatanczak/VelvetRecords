@@ -37,7 +37,7 @@
                             ?> </p>
                     <p class="h2 text-info mt-1
                     mt-md-auto"><?=
-                        $cd->disc_price ?>
+                        $cd->disc_price ?> €
                     </p>
                 </div>
             </div>

@@ -8,6 +8,8 @@ class CDs extends Controller {
     }
 
     //!!!User defined function are case insensitive in PhP
+
+    /*This method shows all Cds present in the database */
     public function index() {
         $cds = $this->cdModel->getAllCDs();
         $data = [
@@ -19,6 +21,8 @@ class CDs extends Controller {
 
     }
 
+
+    /*This method shows a singular CD */
     public function details($id){
         $idNumber = substr($id, 3);
         $cd = $this->cdModel->getSingleCD($idNumber);
@@ -28,7 +32,22 @@ class CDs extends Controller {
         $this->loadView('pages/cddetailedinfo', $data);
     }
 
+    /*This method deletes the cd from the database and redirects to the cd
+    list page. Only logged in users can delete cds */
 
+    public function remove($id) {
 
+        $this->cdModel->removeSingleCD($id);
+        redirect('cds/index');
+    }
+
+    public function add(){
+        //Check if the form is being submitted
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+echo 'posting';
+        } else {
+            $this->loadView('pages/addCdForm');
+        }
+    }
 
 }

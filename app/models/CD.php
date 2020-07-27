@@ -27,4 +27,12 @@ class CD {
         return $this->db->getSingleResultWithQuery($query, $params);
     }
 
+    public function removeSingleCD($id){
+        $query = "DELETE FROM disc WHERE disc_id = :id";
+        $params =[
+            'id' => $id
+        ];
+        return $this->db->deleteFromDatabase($query, $params);
+    }
+
 }

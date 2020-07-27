@@ -1,4 +1,5 @@
 <?php require APPROOT . '/views/include/header.php'; ?>
+<?php require APPROOT . '/views/include/deletionConfirmationModal.php'; ?>
 <div class="container-fluid">
 <?php require APPROOT . '/views/include/navbar.php'; ?>
 </div>
@@ -36,20 +37,24 @@ height-min-90vh-override-class">
                 $cd->disc_year
             ?> </p>
             <p class="h2 text-center text-md-left text-info mt-1"><?=
-                $cd->disc_price ?>
+                $cd->disc_price ?> €
             </p>
-          <!--   --------- ADD BUTTONS TO MODIFY DISCS IF THE USER IS LOGGED IN
-            --------------  -->
+          <!----------- ADD BUTTONS TO MODIFY DISCS IF THE USER IS LOGGED IN
+            ---------------->
             <?php if(isset($_SESSION['user_id'])) { ?>
             <div class="text-center text-md-left mt-2 mt-md-auto">
 
                 <a href="#" class=""><img src="<?= URLROOT . 'images/modify-icon.svg' ?>"
                                           alt="add icon" class="" height="30px"
                                           width="30px"></a>
-                <a href="#" class="mx-2"><img src="<?= URLROOT . 'images/add-icon.svg' ?>"
+                <a href="<?= URLROOT . 'cds/add' ?>" class="mx-2"><img src="<?=
+                    URLROOT . 'images/add-icon.svg' ?>"
                                           alt="add icon" class="" height="30px"
                                           width="30px"></a>
-                <a href="#" class=""><img src="<?= URLROOT . 'images/trash-can-icon.svg' ?>"
+                <a id="trash-icon"
+                   class=""><img
+                            src="<?=
+                    URLROOT . 'images/trash-can-icon.svg' ?>"
                                           alt="add icon" class="" height="30px"
                                           width="30px"></a>
             </div>

@@ -53,4 +53,8 @@ class Database {
         return $preparedStatement->execute($params);
     }
 
+    public function deleteFromDatabase($sql, $params) {
+        $preparedStatement = $this->dbHandler->prepare($sql);
+        return $preparedStatement->execute($params);
+    }
 }

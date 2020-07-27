@@ -6,9 +6,11 @@
         VelvetRecords
     </a>
     <?php if(isset($_SESSION['user_id'])) : ?>
-         <a class="nav-link text-light">Hi, <?= $_SESSION['user_name']?></a>
-        <p id="logout-trigger" class="nav-link text-light m-0">Log
-            out</p>
+         <p class="text-light text-center ml-auto my-auto">Hi, <?=
+             $_SESSION['user_name']?></p>
+        <a  id="logout-trigger" class="nav-link text-light
+        m-0">Log
+            out</a>
     <?php else : ?>
     <a id="loginIcon"
        class="d-inline-block

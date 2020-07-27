@@ -1,9 +1,21 @@
+//Toggle loginModal
 let loginIcon = document.getElementById('loginIcon')
 if (loginIcon){
     loginIcon.onclick = function () {
         $('#exampleModalCenter').modal('toggle');
     }
 }
+
+//Present deletionConfirmationModal
+let trashIcon = document.getElementById('trash-icon')
+if (trashIcon){
+    trashIcon.addEventListener('click', showConfirmationModal)
+   function showConfirmationModal(event) {
+        event.preventDefault()
+        $('#deletionConfirmationModal').modal('toggle');
+    }
+}
+
 
 //use eye-icon to toggle passwordInput visibility
 let eyeIcon = document.getElementById('eyeIcon')
@@ -32,6 +44,35 @@ function togglePassVisibility(passFieldName){
     }
 }
 
+/* Preview image before adding a CD to a database*/
+const uploadImageInput = document.getElementById('form-cd-img-upload')
+const previewContainer = document.getElementById('image-preview-container')
+const previewImg = document.getElementById('image-preview-image')
+const previewDefaultText = document.getElementById('image-preview-placeholder')
+
+
+if(uploadImageInput){
+
+    uploadImageInput.addEventListener('change', function (){
+        const file =this.files[0]
+
+        if(file){
+            const reader = new FileReader()
+console.log(file)
+            console.log(previewImg)
+            console.log(previewDefaultText)
+            previewDefaultText.style.display = 'none'
+            previewImg.style.display = 'inline-block'
+            previewContainer.classList.remove('gray-border-override-class')
+
+            reader.addEventListener('load', function(){
+                previewImg.setAttribute('src', this.result)
+            })
+            reader.readAsDataURL(file)
+
+        }
+    })
+}
 
 /* ------------------------------ Login Form Ajax ------------------------------*/
 
