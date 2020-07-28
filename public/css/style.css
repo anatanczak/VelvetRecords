@@ -82,7 +82,7 @@ body{
 }
 .image-preview-image{
     display: none;
-    max-width: 80px;
+    max-width: 50px;
     height: auto;
 }
 

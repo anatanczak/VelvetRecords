@@ -41,6 +41,13 @@ class Database {
         return $preparedStatement->fetchALL(PDO::FETCH_OBJ);
     }
 
+    //get all rows in an array
+    public function getResultSetWithQueryAsArray($sql){
+        $preparedStatement = $this->dbHandler->prepare($sql);
+        $preparedStatement->execute();
+        return $preparedStatement->fetchALL();
+    }
+
 
     public function getSingleResultWithQuery($sql, $params){
         $preparedStatement = $this->dbHandler->prepare($sql);

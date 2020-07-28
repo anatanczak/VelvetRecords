@@ -9,11 +9,7 @@ spl_autoload_register(function ($className){
     require_once ('../app/libraries/'. $className . '.php');
 });
 
-
     require_once('../app/helpers/helper.php');
-
-
-
 
 $router = new Router($_SERVER['QUERY_STRING']);
 

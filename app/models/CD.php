@@ -35,4 +35,8 @@ class CD {
         return $this->db->deleteFromDatabase($query, $params);
     }
 
+    public function addCD(){
+        //TODO:
+    }
+
 }

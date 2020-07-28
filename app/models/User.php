@@ -36,10 +36,13 @@ class User {
         $params = [
             'email' => $email
         ];
-
+        $hashedPassword = null;
         $row = $this->db->getSingleResultWithQuery($query, $params);
 
-        $hashedPassword = $row->password;
+        if($row){
+            $hashedPassword = $row->password;
+
+        }
 
         if(password_verify($password, $hashedPassword)) {
             return $row;
@@ -47,5 +50,4 @@ class User {
             return false;
         }
     }
-
 }

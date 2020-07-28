@@ -41,10 +41,192 @@ class CDs extends Controller {
         redirect('cds/index');
     }
 
+
+    /* THis method adds a cd to a database*/
+
     public function add(){
+
+        //Prepare a list of artists to display in a select
+        $artistModel = $this->loadModel('Artist');
+        $result = $artistModel->getAllCDs();
+
+        $artistList = array();
+        foreach($result as $key => $value){
+            $artistList[$value->artist_id] = $value->artist_name;
+        }
+        var_dump($artistList);
+
         //Check if the form is being submitted
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
-echo 'posting';
+            // Sanitize POST data
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
+            $formErrors = 0;
+
+            $data = [
+                'title' => $_POST['title'],
+                'artist' => $_POST['artist'],
+                'year' => $_POST['year'],
+                'genre' => $_POST['genre'],
+                'label' => $_POST['label'],
+                'price' => $_POST['price']
+            ];
+
+            //SET REGEX
+            //Any character except for <>%\$
+           $allASCIILettersAndNumbersRegex = '/^[^<>%\$]{1,255}$/';
+
+            //Any character except for <>%\$
+            $yearRegex = '/^[\d]{4}$/';
+
+            //Price Regex
+
+            $priceRegex = '/^(?<whole>[0-9]{1,4})([\,\.]{1}(?<decimal>\d\d?))?$/';
+
+            //Validate title
+            $titleIsValid = preg_match($allASCIILettersAndNumbersRegex,
+                $data['title']);
+
+            if (empty($data['title']) || !$titleIsValid){
+                $data['errors']['title_error'] = 'Entrez un titre valide.';
+                $formErrors++;
+            }
+
+
+            //Validate artist
+            $artistIsValid = preg_match($allASCIILettersAndNumbersRegex,
+                $data['artist']);
+
+            if (empty($data['artist']) || !$artistIsValid){
+                $data['errors']['artist_error'] = 'Entrez un artiste valide.';
+                $formErrors++;
+            }
+
+            //Validate year
+            $yearRegexIsValid = preg_match($yearRegex,
+                $data['year']);
+
+
+                $year = intval($data['year']);
+                $currentYear = intval(date('Y'));
+                if($year > 1900 && $year <= $currentYear){
+                    $yearIsValid = true;
+                } else {
+                    $yearIsValid = false;
+                }
+
+            if (empty($data['year']) || !$yearRegexIsValid || !$yearIsValid){
+                $data['errors']['year_error'] = 'Entrez une année valide.';
+                $formErrors++;
+            } else {
+                $data['year'] = intval($data['year']);
+            }
+
+
+
+            //Validate genre
+            $genreIsValid = preg_match($allASCIILettersAndNumbersRegex,
+                $data['genre']);
+
+            if (empty($data['genre']) || !$genreIsValid){
+                $data['errors']['genre_error'] = 'Entrez un genre valide.';
+                $formErrors++;
+            }
+
+            //Validate label
+            $labelIsValid = preg_match($allASCIILettersAndNumbersRegex,
+                $data['label']);
+
+            if (empty($data['label']) || !$labelIsValid){
+                $data['errors']['label_error'] = 'Entrez un label valide.';
+                $formErrors++;
+            }
+
+            //Validate price
+            preg_match($priceRegex,
+                $data['price'], $matches);
+
+            if($matches){
+                if(array_key_exists('whole', $matches)){
+                    $whole = $matches['whole'];
+                } else {
+                    $whole = '';
+                }
+
+                if(array_key_exists('decimal', $matches)){
+                    $decimal= $matches['decimal'];
+                } else {
+                    $decimal = '';
+                }
+
+                $data['price'] = $whole . '.' . $decimal;
+            } else {
+                $data['errors']['price_error'] = "Entrez un prix valide";
+                $formErrors++;
+            }
+
+            //VALIDATE IMAGE UPLOAD
+
+
+            if($_FILES['file']['name']){
+                var_dump($_FILES['file']);
+
+                //get the path where the uploaded file is stored temporarily
+                $temporaryImg = $_FILES['file']['tmp_name'];
+                //set the final directory to move the file to after validation
+                $targetDir = 'images/covers/';
+
+                $imageName = basename($_FILES['file']['name']);
+
+                //set the target path using basename fun which returns the trailing name component from the path
+                $targetImage = $targetDir . $imageName;
+                $maxFileSize = 5000000; //5MB
+                $allowedImageTypes = array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG);
+
+
+                //get an array of info from image
+                $imageCheck = getimagesize($temporaryImg);
+
+                if(isset($imageCheck['mime'])){
+                    $imageExtension = explode('/', $imageCheck['mime']);
+                    $imageExtension = '.' . $imageExtension[1];
+                    var_dump($imageExtension);
+                }
+
+                //Check the image type by comparing index 2 (a constant of type IMAGETYPE_XXX) to the allowedImageTypes array
+                if (! in_array($imageCheck[2], $allowedImageTypes)) {
+                    $data['errors']['img_upload_error'] = 'Images acceptées: gif, jpeg, png!';
+                    $formErrors++;
+                }
+
+                //Check the size
+                if (filesize($temporaryImg) > $maxFileSize){
+                    $data['errors']['img_upload_error'] = 'Taille maximale autorisée est 5MB';
+                    $formErrors++;
+                }
+
+
+            } else {
+                $data['errors']['img_upload_error'] = 'Une erreur de ficher';
+                $formErrors++;
+            }
+
+            //CHECK IF THERE ARE ANY ERRORS IN THE FORM
+            if ($formErrors === 0){
+                echo "no errors in the form";
+                echo $data['title'];
+
+                /*TODO:
+                       Insert cd into database and return the row
+                       Write the image into the folder (with the id as a name)
+                       Check if we can use third party libraries to
+                       Add chmod on the written image
+                        */
+
+            } else {
+                $this->loadview('pages/addCdForm', $data);
+            }
+
         } else {
             $this->loadView('pages/addCdForm');
         }
