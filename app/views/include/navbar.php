@@ -6,6 +6,8 @@
         VelvetRecords
     </a>
     <?php if(isset($_SESSION['user_id'])) : ?>
+        <a href="<?= URLROOT . 'cds/add' ?>" class="nav-link text-light ml-auto">Ajouter un disc <img src="<?=
+            URLROOT . 'images/add-icon.svg' ?>" alt="add icon" class="mx-1" height="15px" width="15px"></a>
          <p class="text-light text-center ml-auto my-auto">Hi, <?=
              $_SESSION['user_name']?></p>
         <a  id="logout-trigger" class="nav-link text-light

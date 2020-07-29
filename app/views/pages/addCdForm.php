@@ -40,13 +40,13 @@
                     ($data['errors']['artist_error']) ?
                         $data['errors']['artist_error'] : 'Artiste';
                     ?><sup class="text-danger">*</sup></label>
-                <input type="text" class="form-control <?php  if(isset
-                ($data['errors']['artist_error'])) echo 'is-invalid';?>"
-                       id="form-cd-artist"
-                       placeholder="Entrez le nom de l'artiste" name="artist"
-                       value="<?php if(isset
-                       ($data['artist'])) echo htmlspecialchars($data['artist']);
-                       ?>">
+                <select name="artist" id="form-cd-artist" class="form-control <?php  if(isset
+                ($data['errors']['artist_error'])) echo 'is-invalid';?>">
+                    <?php foreach ($data['artists'] as $key=>$value):?>
+                    <option value="<?= $value ?>"> <?=$value?></option>
+                    <?php endforeach; ?>
+                </select>
+
             </div>
 
 
@@ -102,8 +102,7 @@
                 ($data['label'])) echo $data['label'];
                 ?>">
             </div>
-
-            <!-- TODO: ADD ALL ERROR HANDLING FIELDS AND VALUE FIELDS --->
+            
 
             <!-----------  PRICE  ----------->
             <div class="form-group">

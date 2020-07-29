@@ -64,4 +64,15 @@ class Database {
         $preparedStatement = $this->dbHandler->prepare($sql);
         return $preparedStatement->execute($params);
     }
+
+    public function insertIntoDatabaseAndGetLastInsertedId($sql, $params) {
+        $preparedStatement = $this->dbHandler->prepare($sql);
+        $preparedStatement->execute($params);
+        return $this->dbHandler->lastInsertId();
+    }
+
+    public function updateInfo($sql, $params){
+        $preparedStatement = $this->dbHandler->prepare($sql);
+        return $preparedStatement->execute($params);
+    }
 }

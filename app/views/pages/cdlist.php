@@ -1,8 +1,9 @@
 <?php require APPROOT . '/views/include/header.php'; ?>
 <div class="container-fluid ">
     <?php require APPROOT . '/views/include/navbar.php'; ?>
-    <h1 class="col-12 text-center p-3"> <?php echo $pageTitle
-        ?> </h1>
+        <h1 class="text-center p-3"> <?php echo $pageTitle
+            ?> </h1>
+
     <div class="row justify-content-center">
     <?php foreach($cds as $cd) : ?>
 
@@ -14,9 +15,9 @@
 
             <div class="row justify-content-center">
                 <div class="col">
-                    <img class="img-fluid rounded" src="<?php echo
+                    <img class="img-fluid rounded" src="<?php echo isset($cd->disc_picture) ?
                     URLROOT . 'images/covers/' .
-                    $cd->disc_picture?>" alt="cd cover"
+                    $cd->disc_picture : URLROOT . 'images/covers/default-cover.jpg' ?>" alt="cd cover"
                      title="cd cover">
                 </div>
 

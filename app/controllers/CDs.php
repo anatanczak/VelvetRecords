@@ -54,7 +54,9 @@ class CDs extends Controller {
         foreach($result as $key => $value){
             $artistList[$value->artist_id] = $value->artist_name;
         }
-        var_dump($artistList);
+        $data = [
+            'artists' => $artistList
+        ];
 
         //Check if the form is being submitted
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -63,14 +65,12 @@ class CDs extends Controller {
 
             $formErrors = 0;
 
-            $data = [
-                'title' => $_POST['title'],
-                'artist' => $_POST['artist'],
-                'year' => $_POST['year'],
-                'genre' => $_POST['genre'],
-                'label' => $_POST['label'],
-                'price' => $_POST['price']
-            ];
+            $data['title'] = $_POST['title'];
+            $data['artist'] = $_POST['artist'];
+            $data['year'] = $_POST['year'];
+            $data['genre'] = $_POST['genre'];
+            $data['label'] = $_POST['label'];
+            $data['price'] = $_POST['price'];
 
             //SET REGEX
             //Any character except for <>%\$
@@ -80,7 +80,6 @@ class CDs extends Controller {
             $yearRegex = '/^[\d]{4}$/';
 
             //Price Regex
-
             $priceRegex = '/^(?<whole>[0-9]{1,4})([\,\.]{1}(?<decimal>\d\d?))?$/';
 
             //Validate title
@@ -94,10 +93,10 @@ class CDs extends Controller {
 
 
             //Validate artist
-            $artistIsValid = preg_match($allASCIILettersAndNumbersRegex,
-                $data['artist']);
 
-            if (empty($data['artist']) || !$artistIsValid){
+            if (in_array($data['artist'], $artistList)){
+                $data['artist'] = array_search($data['artist'], $artistList);
+            } else {
                 $data['errors']['artist_error'] = 'Entrez un artiste valide.';
                 $formErrors++;
             }
@@ -118,10 +117,7 @@ class CDs extends Controller {
             if (empty($data['year']) || !$yearRegexIsValid || !$yearIsValid){
                 $data['errors']['year_error'] = 'Entrez une année valide.';
                 $formErrors++;
-            } else {
-                $data['year'] = intval($data['year']);
             }
-
 
 
             //Validate genre
@@ -169,17 +165,12 @@ class CDs extends Controller {
 
 
             if($_FILES['file']['name']){
-                var_dump($_FILES['file']);
 
                 //get the path where the uploaded file is stored temporarily
                 $temporaryImg = $_FILES['file']['tmp_name'];
                 //set the final directory to move the file to after validation
                 $targetDir = 'images/covers/';
 
-                $imageName = basename($_FILES['file']['name']);
-
-                //set the target path using basename fun which returns the trailing name component from the path
-                $targetImage = $targetDir . $imageName;
                 $maxFileSize = 5000000; //5MB
                 $allowedImageTypes = array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG);
 
@@ -190,7 +181,6 @@ class CDs extends Controller {
                 if(isset($imageCheck['mime'])){
                     $imageExtension = explode('/', $imageCheck['mime']);
                     $imageExtension = '.' . $imageExtension[1];
-                    var_dump($imageExtension);
                 }
 
                 //Check the image type by comparing index 2 (a constant of type IMAGETYPE_XXX) to the allowedImageTypes array
@@ -207,7 +197,7 @@ class CDs extends Controller {
 
 
             } else {
-                $data['errors']['img_upload_error'] = 'Une erreur de ficher';
+                $data['errors']['img_upload_error'] = 'Ajouter un ficher';
                 $formErrors++;
             }
 
@@ -222,13 +212,37 @@ class CDs extends Controller {
                        Check if we can use third party libraries to
                        Add chmod on the written image
                         */
+                //INSERT THE CD WITHOUT PICTURE AND GET THE ID
+                $CDID = $this->cdModel->addCDWithoutImage($data);
+
+                //set the target path using basename fun which returns the trailing name component from the path
+                if($CDID && $targetDir && $imageExtension && $temporaryImg){
+                    $targetImage = $targetDir . $CDID . $imageExtension;
+                   //Upload Img
+                    if( move_uploaded_file($temporaryImg, $targetImage)){
+                        //make the file not executable
+                        chmod($targetImage, 0644);
+
+                        //get the name of the image
+                        $imageName = basename($targetImage);
+                        //add the image to data base
+
+                        var_dump($this->cdModel->updateImageTitle($CDID, $imageName));
+                    } else {
+                        //TODO: ADD CUSTOM ERROR HANDLER TO SHOW THE ERROR MESSAGE
+                        echo 'An error occurred while uploading the image';
+                    }
+                } else {
+                    //TODO: ADD CUSTOM ERROR HANDLER TO SHOW THE ERROR MESSAGE
+                    echo "One of the variables needed to store the image wasn't set";
+                }
 
             } else {
                 $this->loadview('pages/addCdForm', $data);
             }
 
         } else {
-            $this->loadView('pages/addCdForm');
+            $this->loadView('pages/addCdForm', $data);
         }
     }
 

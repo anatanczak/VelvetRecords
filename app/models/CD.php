@@ -35,8 +35,27 @@ class CD {
         return $this->db->deleteFromDatabase($query, $params);
     }
 
-    public function addCD(){
-        //TODO:
+    public function addCDWithoutImage($data){
+        $query = "INSERT INTO disc(disc_title, disc_year, disc_label, disc_genre, disc_price, artist_id) VALUES(:title, :year, :label, :genre, :price, :artist)";
+        $params = [
+            'title' => $data['title'],
+            'year'  => $data['year'],
+            'label' => $data['label'],
+            'genre' => $data['genre'],
+            'price' => $data['price'],
+            'artist' => $data['artist']
+        ];
+        return $this->db->insertIntoDatabaseAndGetLastInsertedId($query, $params);
+    }
+
+    public function updateImageTitle($id, $picture){
+        $query = "UPDATE disc SET disc_picture = :picture  WHERE disc_id = :id";
+        $params = [
+            'id' => $id,
+            'picture' => $picture
+        ];
+
+        return $this->db->updateInfo($query, $params);
     }
 
 }

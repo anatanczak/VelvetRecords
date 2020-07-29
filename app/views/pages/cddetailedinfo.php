@@ -11,9 +11,9 @@ height-min-90vh-override-class">
      my-auto">
         <div class="col-12 col-md-6 d-flex flex-row-reverse">
             <img class="img-fluid rounded"
-                 src="<?php echo
-                URLROOT . 'images/covers/' .
-                $cd->disc_picture?>" alt="cd cover"
+                 src="<?php echo isset($cd->disc_picture) ?
+                     URLROOT . 'images/covers/' .
+                     $cd->disc_picture : URLROOT . 'images/covers/default-cover.jpg' ?>" alt="cd cover"
                  title="cd cover">
         </div>
 
@@ -45,10 +45,6 @@ height-min-90vh-override-class">
             <div class="text-center text-md-left mt-2 mt-md-auto">
 
                 <a href="#" class=""><img src="<?= URLROOT . 'images/modify-icon.svg' ?>"
-                                          alt="add icon" class="" height="30px"
-                                          width="30px"></a>
-                <a href="<?= URLROOT . 'cds/add' ?>" class="mx-2"><img src="<?=
-                    URLROOT . 'images/add-icon.svg' ?>"
                                           alt="add icon" class="" height="30px"
                                           width="30px"></a>
                 <a id="trash-icon"
