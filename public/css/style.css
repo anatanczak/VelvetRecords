@@ -90,6 +90,29 @@ body{
 .width-100-override-class{
     width: 100%;
 }
+
+/*--------   SUCCESS MODAL CSS     ----------*/
+
+.background{
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(60, 60, 60, 0.5);
+    z-index: 5;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    display: none;
+}
+
+.success-icon-wrapper{
+    height: 200px;
+    width: 200px;
+}
 /*----MODAL CSS---*/
 
 .form-elegant .font-small {

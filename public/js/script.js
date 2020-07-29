@@ -1,3 +1,5 @@
+const successModal = document.getElementById('success-modal')
+
 //Toggle loginModal
 let loginIcon = document.getElementById('loginIcon')
 if (loginIcon){
@@ -44,7 +46,7 @@ function togglePassVisibility(passFieldName){
     }
 }
 
-/* Preview image before adding a CD to a database*/
+/* ----------- Preview image before adding a CD to a database ----------------*/
 const uploadImageInput = document.getElementById('form-cd-img-upload')
 const previewContainer = document.getElementById('image-preview-container')
 const previewImg = document.getElementById('image-preview-image')
@@ -58,9 +60,6 @@ if(uploadImageInput){
 
         if(file){
             const reader = new FileReader()
-console.log(file)
-            console.log(previewImg)
-            console.log(previewDefaultText)
             previewDefaultText.style.display = 'none'
             previewImg.style.display = 'inline-block'
             previewContainer.classList.remove('gray-border-override-class')
@@ -116,22 +115,19 @@ function submitLoginInfo(event){
                 addInvalidInputAppearance(passwordLabel, passwordInput, passwordError)
                 addErrorMessage(errorPlaceholder, 'Un de vos idéntifients est erroné')
             } else {
-                let contentContainer = document.getElementById('login-popup-content-container')
+                let contentContainer = document.getElementById('exampleModalCenter')
 
-                //add CSS classes to show success message
-                deleteAllChildNodes(contentContainer)
-                contentContainer.classList.add('row', 'justify-content-center')
-                contentContainer.classList.remove('modal-content')
-                appendImageAndMessage(contentContainer, '../images/success-icon.svg', 'Succès!')
-
+                // show success message
+                contentContainer.style.display = 'none'
+                successModal.style.display = 'flex'
 
                 setTimeout(function() {
+                    successModal.style.display = 'none'
                     window.location.reload()
                 }, 1000);
             }
 
         } else {
-            //TODO: SHOW AN ERROR MESSAGE ON THE LOGIN MODAL
             addInvalidInputAppearance(emailLabel, emailInput)
             addInvalidInputAppearance(passwordLabel, passwordInput)
 
@@ -155,7 +151,11 @@ let logoutButton = document.getElementById('logout-trigger')
             //TODO: FIX THE BUG WITH THE XHR OBJ
              xhr.onload = function () {
                  if (xhr.status == 200){
+
+                     successModal.style.display = 'flex'
+
                      setTimeout(function() {
+                         successModal.style.display = 'none'
                          window.location.reload()
                      }, 500);
                  }
@@ -191,10 +191,14 @@ function addErrorMessage(placeholder, message){
     placeholder.innerHTML = message
 }
 
+
+
+
 function deleteAllChildNodes(parentNode) {
 parentNode.querySelectorAll('*').forEach(n => n.remove())
 }
 
+//Extra functions not used
 function appendImageAndMessage(parentNode, imgName, message) {
     let newTextAndImgWrapper = document.createElement("div")
     newTextAndImgWrapper.setAttribute("class", "text-center text-light d-flex flex-column h5")

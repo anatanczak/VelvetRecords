@@ -38,7 +38,11 @@ class CDs extends Controller {
     public function remove($id) {
 
         $this->cdModel->removeSingleCD($id);
-        redirect('cds/index');
+        $data = [
+            'title' => 'Succès',
+            'message' => 'Le disc a été supprimé avec le succès.'
+        ];
+        $this->loadView('pages/success', $data);
     }
 
 
@@ -222,8 +226,6 @@ class CDs extends Controller {
                     //TODO: ADD CUSTOM ERROR HANDLER TO SHOW THE ERROR MESSAGE
                     echo "One of the variables needed to store the image wasn't set";
                 }
-
-
             }
 
             //update pictureField only if the picture changes
@@ -233,15 +235,28 @@ class CDs extends Controller {
             //update all fields except the picture
            if ( $formErrors === 0) {
                $data = [
-
+                   'id' => $data['id'],
+                   'title' => $data['title'],
+                   'year' => $data['year'],
+                   'label' => $data['label'],
+                   'genre' => $data['genre'],
+                   'price' => $data['price'],
+                   'artist' => $data['artist']
                ];
                //TODO: UPDATE FIELDS
+               $rowIsUpdated = $this->cdModel->updateAllFieldsWithoutImage($data);
                //Show Success message
-               $successMessageData = [
-                   'title' => 'Succès',
-                   'message' => 'Les modifications ont été enregistrées dans la base de données.'
-               ];
-               $this->loadview('pages/success', $successMessageData);
+
+               if($rowIsUpdated){
+                   $successMessageData = [
+                       'title' => 'Succès',
+                       'message' => 'Les modifications ont été enregistrées dans la base de données.'
+                   ];
+                   $this->loadview('pages/success', $successMessageData);
+               } else {
+                   echo "Les changements n'ont pas été enregistrés";
+               }
+
            } else {
                $this->loadview('pages/cdForm', $data);
            }

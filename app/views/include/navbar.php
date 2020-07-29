@@ -24,3 +24,9 @@
     </a>
     <?php endif; ?>
 </nav>
+<!-- Success modal -->
+<div class="background" id="success-modal">
+    <div class="success-icon-wrapper">
+        <img src="<?= URLROOT . 'images/success-icon.svg'?>" alt="">
+    </div>
+</div>

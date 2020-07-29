@@ -18,7 +18,7 @@
                         $data['message'] : 'Merci. Votre demarche est prise en compte.');
                     ?></p>
                 <a href=" <?php echo(isset($data['url']) ? $data['url'] :
-                    URLROOT . 'cds/index');
+                    URLROOT . 'cds');
                 ?> " class="btn btn-dark btn-block"><?php echo(isset($data['urlTitle']) ? $data['urlTitle'] :
                         'Accueil');
                     ?></a>

@@ -88,7 +88,7 @@ class Users extends Controller{
 
                     $data = ['title' => 'Succès!',
                         'message' => 'Merci ' . $data['firstName'] . ' pour votre inscription. Vous pouvez vous connecter dès maintenant.',
-                        'urlTitle' => 'Me connecter'
+                        'urlTitle' => 'OK'
                     ];
                     $this->loadView('pages/success', $data);
                 } else {

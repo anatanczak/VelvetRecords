@@ -70,6 +70,7 @@ class CD {
             'price' => $data['price'],
             'artist' => $data['artist']
         ];
+        return $this->db->updateInfo($query, $params);
     }
 
 }
