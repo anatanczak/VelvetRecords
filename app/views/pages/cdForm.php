@@ -9,7 +9,7 @@
         <!--multipart/form-data is one of the value of enctype attribute, which
         is used in form element that have a file upload. multi-part means form
         data divides into multiple parts and send to server. --->
-        <form method="post" action=" <?= URLROOT . 'cds/add'?>"
+        <form method="post" action="<?php echo isset($data['id']) ? URLROOT . 'cds/update/id=' . $data['id'] : URLROOT . 'cds/add'?>"
               enctype="multipart/form-data" class="">
 
 
@@ -41,9 +41,10 @@
                         $data['errors']['artist_error'] : 'Artiste';
                     ?><sup class="text-danger">*</sup></label>
                 <select name="artist" id="form-cd-artist" class="form-control <?php  if(isset
-                ($data['errors']['artist_error'])) echo 'is-invalid';?>">
+                ($data['errors']['artist_error'])) echo 'is-invalid'?>">
                     <?php foreach ($data['artists'] as $key=>$value):?>
-                    <option value="<?= $value ?>"> <?=$value?></option>
+                    <option value="<?= $value ?>" selected="<?php  if(isset
+                    ($data['artist'])) echo 'selected'?>"> <?=$value?></option>
                     <?php endforeach; ?>
                 </select>
 
@@ -144,18 +145,18 @@
                                for="form-cd-img-upload">Parcourir
                             les fichiers</label>
 
-                        <div class="image-preview-container
-                            gray-border-override-class
+                        <div class="image-preview-container <?php echo isset($data['picture']) ? '' :
+                            'gray-border-override-class' ?>
                              rounded my-2 ml-2"
                              id="image-preview-container">
                             <img src="" id="image-preview-image" alt="Image Preview"
                                  class="image-preview-image display-none-override-class
                      rounded" >
-                            <img src="<?= URLROOT .
+                            <img src="<?php echo isset($data['picture']) ? URLROOT . 'images/covers/' . $data['picture'] : URLROOT .
                             'images/img-placeholder-icon.svg'?>"
                                  id="image-preview-placeholder"
-                                 class="image-preview-placeholder
-                          my-auto mx-auto" height="30px" width="30px">
+                                 class="image-preview-placeholder rounded
+                          my-auto mx-auto" height="40px" width="40px">
                         </div>
 
                         <input type="submit" class="btn btn-dark m-2

@@ -6,7 +6,7 @@ class Artist {
         $this->db = new Database();
     }
 
-    public function getAllCDs() {
+    public function getAllArtists() {
         $query = "SELECT * FROM artist";
         return $this->db->getResultSetWithQuery($query);
     }

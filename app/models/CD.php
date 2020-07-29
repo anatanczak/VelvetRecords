@@ -58,4 +58,18 @@ class CD {
         return $this->db->updateInfo($query, $params);
     }
 
+
+    public function updateAllFieldsWithoutImage($data){
+        $query = "UPDATE disc SET disc_title = :title, disc_year = :year, disc_label = :label, disc_genre = :genre, disc_price = :price, artist_id = :artist WHERE disc_id = :id";
+        $params = [
+            'id' => $data['id'],
+            'title' => $data['title'],
+            'year'  => $data['year'],
+            'label' => $data['label'],
+            'genre' => $data['genre'],
+            'price' => $data['price'],
+            'artist' => $data['artist']
+        ];
+    }
+
 }

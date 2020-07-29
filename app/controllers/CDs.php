@@ -42,13 +42,17 @@ class CDs extends Controller {
     }
 
 
+
+
+
+
     /* THis method adds a cd to a database*/
 
     public function add(){
 
         //Prepare a list of artists to display in a select
         $artistModel = $this->loadModel('Artist');
-        $result = $artistModel->getAllCDs();
+        $result = $artistModel->getAllArtists();
 
         $artistList = array();
         foreach($result as $key => $value){
@@ -63,7 +67,7 @@ class CDs extends Controller {
             // Sanitize POST data
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
-            $formErrors = 0;
+
 
             $data['title'] = $_POST['title'];
             $data['artist'] = $_POST['artist'];
@@ -72,146 +76,26 @@ class CDs extends Controller {
             $data['label'] = $_POST['label'];
             $data['price'] = $_POST['price'];
 
-            //SET REGEX
-            //Any character except for <>%\$
-           $allASCIILettersAndNumbersRegex = '/^[^<>%\$]{1,255}$/';
+            $data = validateFields($data);
+            //change this to get this number from the array
+            $formErrors = $data['formErrors'];
 
-            //Any character except for <>%\$
-            $yearRegex = '/^[\d]{4}$/';
-
-            //Price Regex
-            $priceRegex = '/^(?<whole>[0-9]{1,4})([\,\.]{1}(?<decimal>\d\d?))?$/';
-
-            //Validate title
-            $titleIsValid = preg_match($allASCIILettersAndNumbersRegex,
-                $data['title']);
-
-            if (empty($data['title']) || !$titleIsValid){
-                $data['errors']['title_error'] = 'Entrez un titre valide.';
-                $formErrors++;
-            }
-
-
-            //Validate artist
-
-            if (in_array($data['artist'], $artistList)){
-                $data['artist'] = array_search($data['artist'], $artistList);
-            } else {
-                $data['errors']['artist_error'] = 'Entrez un artiste valide.';
-                $formErrors++;
-            }
-
-            //Validate year
-            $yearRegexIsValid = preg_match($yearRegex,
-                $data['year']);
-
-
-                $year = intval($data['year']);
-                $currentYear = intval(date('Y'));
-                if($year > 1900 && $year <= $currentYear){
-                    $yearIsValid = true;
-                } else {
-                    $yearIsValid = false;
-                }
-
-            if (empty($data['year']) || !$yearRegexIsValid || !$yearIsValid){
-                $data['errors']['year_error'] = 'Entrez une année valide.';
-                $formErrors++;
-            }
-
-
-            //Validate genre
-            $genreIsValid = preg_match($allASCIILettersAndNumbersRegex,
-                $data['genre']);
-
-            if (empty($data['genre']) || !$genreIsValid){
-                $data['errors']['genre_error'] = 'Entrez un genre valide.';
-                $formErrors++;
-            }
-
-            //Validate label
-            $labelIsValid = preg_match($allASCIILettersAndNumbersRegex,
-                $data['label']);
-
-            if (empty($data['label']) || !$labelIsValid){
-                $data['errors']['label_error'] = 'Entrez un label valide.';
-                $formErrors++;
-            }
-
-            //Validate price
-            preg_match($priceRegex,
-                $data['price'], $matches);
-
-            if($matches){
-                if(array_key_exists('whole', $matches)){
-                    $whole = $matches['whole'];
-                } else {
-                    $whole = '';
-                }
-
-                if(array_key_exists('decimal', $matches)){
-                    $decimal= $matches['decimal'];
-                } else {
-                    $decimal = '';
-                }
-
-                $data['price'] = $whole . '.' . $decimal;
-            } else {
-                $data['errors']['price_error'] = "Entrez un prix valide";
-                $formErrors++;
-            }
 
             //VALIDATE IMAGE UPLOAD
+            //get the path where the uploaded file is stored temporarily
+            $temporaryImg = $_FILES['file']['tmp_name'];
+            //set the final directory to move the file to after validation
+            $targetDir = 'images/covers/';
 
+            $validation = validateImage();
+            $data['errors']['img_upload_error'] = $validation['errorMessage'];
+                $formErrors += $validation['errorCount'];
 
-            if($_FILES['file']['name']){
+            $imageExtension = $validation['imageExtension'];
 
-                //get the path where the uploaded file is stored temporarily
-                $temporaryImg = $_FILES['file']['tmp_name'];
-                //set the final directory to move the file to after validation
-                $targetDir = 'images/covers/';
-
-                $maxFileSize = 5000000; //5MB
-                $allowedImageTypes = array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG);
-
-
-                //get an array of info from image
-                $imageCheck = getimagesize($temporaryImg);
-
-                if(isset($imageCheck['mime'])){
-                    $imageExtension = explode('/', $imageCheck['mime']);
-                    $imageExtension = '.' . $imageExtension[1];
-                }
-
-                //Check the image type by comparing index 2 (a constant of type IMAGETYPE_XXX) to the allowedImageTypes array
-                if (! in_array($imageCheck[2], $allowedImageTypes)) {
-                    $data['errors']['img_upload_error'] = 'Images acceptées: gif, jpeg, png!';
-                    $formErrors++;
-                }
-
-                //Check the size
-                if (filesize($temporaryImg) > $maxFileSize){
-                    $data['errors']['img_upload_error'] = 'Taille maximale autorisée est 5MB';
-                    $formErrors++;
-                }
-
-
-            } else {
-                $data['errors']['img_upload_error'] = 'Ajouter un ficher';
-                $formErrors++;
-            }
 
             //CHECK IF THERE ARE ANY ERRORS IN THE FORM
             if ($formErrors === 0){
-                echo "no errors in the form";
-                echo $data['title'];
-
-                /*TODO:
-                       Insert cd into database and return the row
-                       Write the image into the folder (with the id as a name)
-                       Check if we can use third party libraries to
-                       Add chmod on the written image
-                        */
                 //INSERT THE CD WITHOUT PICTURE AND GET THE ID
                 $CDID = $this->cdModel->addCDWithoutImage($data);
 
@@ -227,7 +111,12 @@ class CDs extends Controller {
                         $imageName = basename($targetImage);
                         //add the image to data base
 
-                        var_dump($this->cdModel->updateImageTitle($CDID, $imageName));
+                        $this->cdModel->updateImageTitle($CDID, $imageName);
+                        $successMessageData = [
+                            'title' => 'Succès',
+                            'message' => 'Le disc a été ajouté dans la base de données.'
+                        ];
+                        $this->loadview('pages/success', $successMessageData);
                     } else {
                         //TODO: ADD CUSTOM ERROR HANDLER TO SHOW THE ERROR MESSAGE
                         echo 'An error occurred while uploading the image';
@@ -238,11 +127,128 @@ class CDs extends Controller {
                 }
 
             } else {
-                $this->loadview('pages/addCdForm', $data);
+                $this->loadview('pages/cdForm', $data);
             }
 
         } else {
-            $this->loadView('pages/addCdForm', $data);
+            $this->loadView('pages/cdForm', $data);
+        }
+    }
+
+
+    //This method updates CD info
+
+    public function update($id) {
+
+        //make a query to get info about the cd
+        $idNumber = substr($id, 3);
+        $cd = $this->cdModel->getSingleCD($idNumber);
+
+        //Prepare a list of artists to display in a select
+        $artistModel = $this->loadModel('Artist');
+        $result = $artistModel->getAllArtists();
+
+        $artistList = array();
+        foreach($result as $key => $value){
+            $artistList[$value->artist_id] = $value->artist_name;
+        }
+        //create a data array
+        $data = [
+            'id' => $cd->disc_id,
+            'title' => $cd->disc_title,
+            'year' => $cd->disc_year,
+            'label' => $cd->disc_label,
+            'genre' => $cd->disc_genre,
+            'price' => $cd->disc_price,
+            'artist' => $cd->artist_name,
+            'picture' => $cd->disc_picture,
+            'artists' => $artistList
+        ];
+
+        //check if post else present the view and pass in data array
+
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+
+            //compare old values with new and set them if needed
+
+            $data['title'] = compareValues($data['title'], $_POST['title']);
+            $data['year'] = compareValues($data['year'], $_POST['year']);
+            $data['label'] = compareValues($data['label'], $_POST['label']);
+            $data['genre'] = compareValues($data['genre'], $_POST['genre']);
+            $data['price'] = compareValues($data['price'], $_POST['price']);
+            $data['artist'] = compareValues($data['artist'], $_POST['artist']);
+
+
+            //validate the fields
+           $data = validateFields($data);
+           $formErrors = 0;
+           $formErrors += $data['formErrors'];
+
+           //check if there is a picture  to change and proceed to the picture validation
+
+            if($_FILES['file']['name']) {
+                //VALIDATE IMAGE UPLOAD
+                //get the path where the uploaded file is stored temporarily
+                $temporaryImg = $_FILES['file']['tmp_name'];
+
+                //set the final directory to move the file to after validation
+                $targetDir = 'images/covers/';
+
+                $validation = validateImage();
+                $data['errors']['img_upload_error'] = $validation['errorMessage'];
+                $formErrors += $validation['errorCount'];
+
+                $imageExtension = $validation['imageExtension'];
+
+                $CDID = $data['id'];
+                //set the target path using basename fun which returns the trailing name component from the path
+                if($CDID && $targetDir && $imageExtension && $temporaryImg){
+                    $targetImage = $targetDir . $CDID . $imageExtension;
+                    //Upload Img
+                    if( move_uploaded_file($temporaryImg, $targetImage)){
+                        //make the file not executable
+                        chmod($targetImage, 0644);
+
+                        //get the name of the image
+                        $imageName = basename($targetImage);
+                        //add the image to data base
+                        $this->cdModel->updateImageTitle($CDID, $imageName);
+
+                    } else {
+                        //TODO: ADD CUSTOM ERROR HANDLER TO SHOW THE ERROR MESSAGE
+                        echo 'An error occurred while uploading the image';
+                    }
+                } else {
+                    //TODO: ADD CUSTOM ERROR HANDLER TO SHOW THE ERROR MESSAGE
+                    echo "One of the variables needed to store the image wasn't set";
+                }
+
+
+            }
+
+            //update pictureField only if the picture changes
+
+            //delete the old picture
+
+            //update all fields except the picture
+           if ( $formErrors === 0) {
+               $data = [
+
+               ];
+               //TODO: UPDATE FIELDS
+               //Show Success message
+               $successMessageData = [
+                   'title' => 'Succès',
+                   'message' => 'Les modifications ont été enregistrées dans la base de données.'
+               ];
+               $this->loadview('pages/success', $successMessageData);
+           } else {
+               $this->loadview('pages/cdForm', $data);
+           }
+
+
+        } else {
+            $this->loadview('pages/cdForm', $data);
         }
     }
 

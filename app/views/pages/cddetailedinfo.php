@@ -44,7 +44,7 @@ height-min-90vh-override-class">
             <?php if(isset($_SESSION['user_id'])) { ?>
             <div class="text-center text-md-left mt-2 mt-md-auto">
 
-                <a href="#" class=""><img src="<?= URLROOT . 'images/modify-icon.svg' ?>"
+                <a href="<?= URLROOT . 'cds/update/id=' . $cd->disc_id?>" class=""><img src="<?= URLROOT . 'images/modify-icon.svg' ?>"
                                           alt="add icon" class="" height="30px"
                                           width="30px"></a>
                 <a id="trash-icon"
