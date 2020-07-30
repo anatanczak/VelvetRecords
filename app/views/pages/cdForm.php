@@ -27,7 +27,7 @@
                        placeholder="Entrer le titre..." name="title" value="<?php if
                 (isset
                 ($data['title'])) echo htmlspecialchars($data['title']);
-                ?>">
+                ?>" required>
             </div>
 
 
@@ -41,7 +41,7 @@
                         $data['errors']['artist_error'] : 'Artiste';
                     ?><sup class="text-danger">*</sup></label>
                 <select name="artist" id="form-cd-artist" class="form-control <?php  if(isset
-                ($data['errors']['artist_error'])) echo 'is-invalid'?>">
+                ($data['errors']['artist_error'])) echo 'is-invalid'?>" required>
                     <?php foreach ($data['artists'] as $key=>$value):?>
                     <option value="<?= $value ?>" selected="<?php  if(isset
                     ($data['artist'])) echo 'selected'?>"> <?=$value?></option>
@@ -66,7 +66,7 @@
                        placeholder="Entrez l'année de sortie" name="year" value="<?php
                 if(isset
                 ($data['year'])) echo htmlspecialchars($data['year']);
-                ?>">
+                ?>" required>
             </div>
 
 
@@ -83,7 +83,7 @@
                 ($data['errors']['year_error'])) echo 'is-invalid';?>" id="form-cd-genre"
                        placeholder="Entrez le genre" name="genre" value="<?php if(isset
                 ($data['genre'])) echo $data['genre'];
-                ?>">
+                ?>" required>
             </div>
 
 
@@ -101,7 +101,7 @@
                        id="form-cd-label"
                        placeholder="Entrez le label" name="label" value="<?php if(isset
                 ($data['label'])) echo $data['label'];
-                ?>">
+                ?>" required>
             </div>
             
 
@@ -119,7 +119,7 @@
                 <input type="text" class="form-control <?php  if(isset
                 ($data['errors']['price_error'])) echo 'is-invalid';?>" id="form-cd-price"
                        placeholder="Entrez le prix" name="price" value="<?php if(isset
-                ($data['price'])) echo $data['price']; ?>">
+                ($data['price'])) echo $data['price']; ?>" required>
             </div>
 
 
