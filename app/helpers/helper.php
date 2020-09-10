@@ -20,7 +20,7 @@ function validateFields($data){
     //Any character except for <>%\$
     $allASCIILettersAndNumbersRegex = '/^[^<>%\$]{1,255}$/';
 
-    //Any character except for <>%\$
+    //year
     $yearRegex = '/^[\d]{4}$/';
 
     //Price Regex
