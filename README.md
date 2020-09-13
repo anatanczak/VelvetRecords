@@ -1,15 +1,15 @@
 # VelvetRecords
 Mini project to learn MVC, CRUD, PDO using PHP. 
 
-Un petit projet pour apprendre MVC, CRUD, PDO avec PHP. 
+Un petit projet pour maîtriser MVC, CRUD, PDO avec PHP. 
 
-**Les fonctionalités:**
+**Les fonctionnalités:**
 
 - Connexion/Déconnexion 
-- Affichage d'un liste de produit
-- Ajout du produit
-- Suppression du produit
-- Modification du produit
+- Affichage d'une liste de produits
+- Ajout d'un produit
+- Suppression d'un produit
+- Modification d'un produit
 
 
 ![](velvet-records.gif)
